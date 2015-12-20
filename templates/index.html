@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>社区村订餐统计</title>
+    <link href="{{ url_for('static',  filename='bower_components/bootstrap/dist/css/bootstrap.min.css')}}"
+          rel="stylesheet">
+    <link href="{{ url_for('static', filename='css.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">社区村订餐</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#login" id="login">登陆</a></li>
+                    <li><a href="#add" id="add">添加</a></li>
+                    <li><a href="#statistic" id="statistic">统计</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="jumbotron" id="login_container">
+        <div id="not_login">
+            <h2 class="form-signin-heading">请登录</h2>
+            <select name="mobile" id="option" class="form-control">
+            </select></br>
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="请输入密码" required>
+            <button class="btn btn-lg btn-primary btn-block" id="submit">登录</button>
+        </div>
+        <div id="logined">
+            <h2 class="form-signin-heading">你已登陆</h2>
+        </div>
+    </div>
+    <div class="jumbotron" id="add_container">
+        <h1>添加餐费</h1>
+        <input id="calendar"/>
+        <input id="money" placeholder="请输入金额"/><br/>
+        <button id="add_money">提交</button>
+    </div>
+    <div class="jumbotron" id="statistic_container">
+        <h1>本月统计</h1>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='bower_components/moment/min/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='bower_components/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ url_for('static',  filename='bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+<script src="{{ url_for('static',  filename='bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js')}}"></script>
+
+<script>
+    var userinfo;
+    var users;
+    var statistics;
+
+    function login() {
+        var mobile = $('#option').val();
+        var password = $('#password').val();
+        $.post('/api/login', {mobile: mobile, password: password}, function (data) {
+            if (data && data['user']) {
+                window.localStorage.setItem('userinfo', JSON.stringify(data['user']));
+                window.location.href = '/#add';
+                userinfo = data['user'];
+                go_add_container();
+            } else {
+                console.log('login error');
+            }
+        })
+    }
+
+    function get_users() {
+        if (users && users.length) {
+            return users;
+        } else {
+            $.get('/api/users', function (data) {
+                users = data.users;
+                $('#option').empty();
+                $('#option').append("<option value=\"\" SELECTED>请选择用户</option>");
+                for (var i in users) {
+                    $('#option').append("<option value=\"" + users[i]['mobile'] + "\">" + users[i]['username'] + "</option>");
+                }
+                return users;
+            })
+        }
+    }
+
+    function add_canfei() {
+        var date = $('#calendar').val();
+        var money = $('#money').val();
+        if (date && money) {
+            $.ajax({
+                url: '/api/add_canfei',
+                type: 'POST',
+                headers: {
+                    "Authorization": "Basic " + userinfo['token']
+                },
+                data: {
+                    date: date,
+                    money: money
+                }
+            }, function (data) {
+                console.log(data);
+            })
+        }
+    }
+
+    function get_statistics() {
+        $.ajax({
+            url: '/api/statistic',
+            type: 'GET',
+            headers: {
+                "Authorization": "Basic " + userinfo['token']
+            }
+        }, function (data) {
+            console.log(data);
+            statistics = data.statistics;
+        })
+    }
+
+    function go_login_container() {
+        users = get_users();
+        $('#login_container').show();
+        $('#add_container').hide();
+        $('#statistic_container').hide();
+        if (!userinfo || !userinfo['token']) {
+            $('#logined').hide();
+            $('#not_login').show();
+        }else{
+            $('#not_login').hide();
+            $('#logined').show();
+        }
+    }
+
+    function go_add_container() {
+        $('#login_container').hide();
+        $('#add_container').show();
+        $('#statistic_container').hide();
+        $('#calendar').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+    }
+
+    function go_statistic_container() {
+        $('#login_container').hide();
+        $('#add_container').hide();
+        $('#statistic_container').show();
+        get_statistics();
+    }
+
+    $(function () {
+        if (!userinfo || !userinfo['token']) {
+            userinfo = JSON.parse(window.localStorage.getItem('userinfo'));
+        }
+        if (userinfo && userinfo['token']) {
+            window.location.href = '/#add';
+            get_statistics();
+            get_statistics();
+            go_add_container();
+        } else {
+            window.location.href = '/#login';
+            go_login_container();
+        }
+        $('#submit').on('click', function () {
+            login();
+        });
+        $('#add').on('click', function () {
+            go_add_container();
+        });
+
+        $('#statistic').on('click', function () {
+            go_statistic_container();
+        });
+
+        $('#add_money').on('click', function () {
+            add_canfei();
+        });
+    });
+</script>
+</body>
+</html>

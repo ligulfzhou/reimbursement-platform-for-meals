@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}
+<title>添加订餐</title>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/add">社区村订餐</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/add" class="active" id="add">添加</a></li>
+                    <li><a href="/statistic" id="statistic">统计</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="jumbotron" id="add_container">
+        <h3>添加餐费</h3>
+
+        <div class="row">
+            <div class='col-sm-6'>
+                选择时间: <input type='text' class="form-control" id='calendar'/>
+            </div>
+            <div class='col-sm-6'>
+                输入金额: <input id="money" class="form-control" placeholder="请输入金额"/>
+            </div>
+        </div>
+        <button id="add_money">提交</button>
+    </div>
+
+
+    <script>
+        var userinfo;
+        function add_canfei() {
+            var date = $('#calendar').val();
+            var money = $('#money').val();
+            console.log(date)
+            console.log(money)
+            if (date && money) {
+                $.ajax({
+                    url: '/api/add_canfei',
+                    type: 'POST',
+                    headers: {
+                        "Authorization": "Basic " + userinfo['token']
+                    },
+                    data: {
+                        date: date,
+                        money: money
+                    }
+                }, function (data) {
+                    alert(data);
+                })
+            }
+        }
+        $(function () {
+            if (!userinfo || !userinfo['token']) {
+                userinfo = JSON.parse(window.localStorage.getItem('userinfo'));
+            }
+            if (!userinfo || !userinfo['token']) {
+                console.log('请先登录');
+            }
+
+            $('#calendar').datetimepicker({
+                locale: 'zh-cn',
+                format: 'YYYY-M-D'
+            });
+            $('#add_money').on('click', function () {
+                console.log("dddddddddd");
+                add_canfei();
+            })
+        })
+    </script>
+
+    {% endblock %}

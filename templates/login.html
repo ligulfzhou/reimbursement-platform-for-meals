@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}
+<title>请登陆</title>
+{% endblock %}
+
+
+{% block body %}
+   <div class="container">
+        <h2 class="form-signin-heading">请登录</h2>
+        <select name="mobile" id="option" class="form-control">
+            <option value="" SELECTED>请选择用户</option>
+            {% for user in users %}
+            <option value="{{ user.mobile }}">{{ user.username }}</option>
+            {% endfor %}
+        </select></br>
+        <label for="password" class="sr-only">Password</label>
+        <input type="password" name="password" id="password" class="form-control" placeholder="请输入密码" required>
+        <button class="btn btn-lg btn-primary btn-block" id="submit">登录</button>
+    </div>
+
+
+
+  <script>
+      function login(){
+          var mobile = $('#option').val();
+          var password = $('#password').val();
+          $.post('/api/login', {mobile: mobile, password: password}, function(data){
+              if (data && data['user']) {
+                window.localStorage.setItem('userinfo', JSON.stringify(data['user']));
+                window.location.href = '/add';
+            } else {
+                console.log('login error');
+            }
+          });
+      }
+      $(function(){
+          $('#submit').on('click', function(){
+              login();
+          })
+      })
+  </script>
+
+{% endblock %}
