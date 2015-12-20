@@ -18,15 +18,55 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/add" class="active" id="add">添加</a></li>
-                    <li><a href="/statistic" id="statistic">统计</a></li>
+                    <li><a href="/add" id="add">添加</a></li>
+                    <li class="active"><a href="/statistic" id="statistic">统计</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li id="logout"><a href='/'>退出</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div>hello world</div>
+    <div>
+        <table class="table table-bordered" id="table">
 
-  <script>
-  </script>
+        </table>
+    </div>
+    <script>
+        var userinfo;
+        function get_statistic() {
+            $.ajax({
+                url: '/api/statistics',
+                type: 'GET',
+                headers: {
+                    "Authorization": "Basic " + userinfo['token']
+                }
+            }).success(function (data) {
+                $('#table').empty();
+                $('#table').append("<thead> <td>时间</td> <td>餐费</td> </thead>");
+                var statistics = data['statistics'];
+                for (var i in statistics) {
+                    $('#table').append("<tr> <td>" + statistics[i]['month'] + "-" + statistics[i]['day'] + "</td> <td>" + statistics[i]['money'] + "</td> </tr>");
+                }
+                $('#table').append("<thead> <td>总计</td> <td>"+data['total']+"</td> </thead>");
+
+            }).error(function () {
+                alert('获取数据出错,请稍后尝试');
+            })
+        }
+        $(function () {
+            if (!userinfo || !userinfo['token']) {
+                userinfo = JSON.parse(window.localStorage.getItem('userinfo'));
+            }
+            if (!userinfo || !userinfo['token']) {
+                window.location.href = '/';
+            }
+
+            $('#logout').on('click', function () {
+                window.localStorage.clear();
+            });
+            get_statistic();
+        })
+    </script>
 </div>
 {% endblock %}

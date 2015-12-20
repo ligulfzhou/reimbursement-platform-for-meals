@@ -74,7 +74,7 @@ def add_canfei():
     date = request.form.get('date', '')
     money = int(request.form.get('money', None) or 0)
     if not date or not money:
-        return jsonify({'add canfei': 'error'})
+        return make_response(jsonify({'canfei': 'error'}))
     year, month, day = date.split('-')
     canfei_data = {
         'user': g.current_user['mobile'],
@@ -84,17 +84,18 @@ def add_canfei():
         'created': round(time.time())
     }
     mongo.db.canfei.insert(canfei_data)
-    return jsonify({'canfei': 'success'})
+    return make_response(jsonify({'canfei': 'success'}))
 
 
-@app.route('/api/statistic')
+@app.route('/api/statistics')
 @auth.login_required
 def statistic():
     timestruct = time.localtime(time.time())
     year, month = timestruct.tm_year, timestruct.tm_mon
     statistics = list(mongo.db.canfei.find({'user': g.current_user['mobile'], 'month': '%s-%s' % (year, month)},
                                            {'_id': 0}).sort([('created', -1)]))
-    return jsonify({'statistics': statistics})
+    total = sum([statistic['money'] for statistic in statistics])
+    return make_response(jsonify({'statistics': statistics, 'total': total}))
 
 if __name__ == '__main__':
     app.run(port=9999, debug=True)
