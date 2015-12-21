@@ -1,5 +1,6 @@
 import base64
 import time
+import logging
 from flask import Flask, render_template, request, g, jsonify, make_response, redirect
 from flask.ext.pymongo import PyMongo
 from flask.ext.httpauth import HTTPBasicAuth
@@ -10,6 +11,7 @@ app.config['MONGO_DBNAME'] = 'dingcan'
 mongo = PyMongo(app, config_prefix='MONGO')
 
 auth = HTTPBasicAuth()
+logging.basicConfig(filename='dingcan.log', level=logging.DEBUG)
 
 
 @auth.verify_password
@@ -30,6 +32,7 @@ def unauthorized():
 
 @app.errorhandler(404)
 def not_found(error):
+    # 404也跳转到首页
     return redirect('/')
 
 
@@ -76,8 +79,13 @@ def add_canfei():
     if not date or not money:
         return make_response(jsonify({'canfei': 'error'}))
     year, month, day = date.split('-')
+    canfei = mongo.db.canfei.find_one(
+        {'mobile': g.current_user['mobile'], 'month': '%s-%s' % (year, month), 'day': day}, {'_id': 0})
+    if canfei:
+        return make_response(jsonify({'canfei': 'error_chongfu'}))
     canfei_data = {
-        'user': g.current_user['mobile'],
+        'username': g.current_user['username'],
+        'mobile': g.current_user['mobile'],
         'month': '%s-%s' % (year, month),
         'day': day,
         'money': money,
@@ -92,10 +100,37 @@ def add_canfei():
 def statistic():
     timestruct = time.localtime(time.time())
     year, month = timestruct.tm_year, timestruct.tm_mon
-    statistics = list(mongo.db.canfei.find({'user': g.current_user['mobile'], 'month': '%s-%s' % (year, month)},
-                                           {'_id': 0}).sort([('created', -1)]))
-    total = sum([statistic['money'] for statistic in statistics])
-    return make_response(jsonify({'statistics': statistics, 'total': total}))
+    if g.current_user['mobile'] == '15201263650':
+        try:
+            statistics = mongo.db.canfei.aggregate([{'$match': {'month': '%s-%s' % (year, month)}},
+                                                    {'$group': {'_id': '$username', 'money': {'$sum': '$money'}}}])
+            total = sum([statistic['money'] for statistic in statistics['result']])
+            return make_response(jsonify({'statistics': statistics['result'], 'total': total}))
+        except Exception as e:
+            logging.error(e)
+            return
+    else:
+        statistics = list(mongo.db.canfei.find({'mobile': g.current_user['mobile'], 'month': '%s-%s' % (year, month)},
+                                               {'_id': 0}).sort([('created', -1)]))
+        total = sum([statistic['money'] for statistic in statistics])
+        return make_response(jsonify({'statistics': statistics, 'total': total}))
+
+
+@app.route('/api/user_statistics')
+@auth.login_required
+def user_statistic():
+    username = request.args.get('username', '')
+    if not username:
+        return make_response(jsonify({'user_statistics': 'error_req'}))
+    timestruct = time.localtime(time.time())
+    year, month = timestruct.tm_year, timestruct.tm_mon
+    if g.current_user['mobile'] == '15201263650':
+        statistics = list(mongo.db.canfei.find({'username': username, 'month': '%s-%s' % (year, month)},
+                                               {'_id': 0}).sort([('created', -1)]))
+        total = sum([statistic['money'] for statistic in statistics])
+        return make_response(jsonify({'statistics': statistics, 'total': total}))
+    else:
+        return make_response(jsonify({'user_statistics': 'error_permission'}))
 
 if __name__ == '__main__':
-    app.run(port=9999, debug=True)
+    app.run(host='0.0.0.0', port=8888, debug=True)

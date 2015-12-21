@@ -62,12 +62,15 @@
                         alert("添加成功: \n "
                                 + date + " \n"
                                 + money);
+                    } else if (data['canfei'] == 'error_chongfu') {
+                        alert("添加失败: 不要重复添加");
                     } else {
-                        alert("添加失败, 请稍后重试");
+                        alert("添加失败, 稍后重试");
                     }
                 })
             }
         }
+
         $(function () {
             if (!userinfo || !userinfo['token']) {
                 userinfo = JSON.parse(window.localStorage.getItem('userinfo'));
@@ -86,7 +89,7 @@
             $('#logout').on('click', function () {
                 window.localStorage.clear();
             })
-        })
+        });
     </script>
 
     {% endblock %}

@@ -32,8 +32,49 @@
 
         </table>
     </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">详情</h4>
+                </div>
+                <div class="modal-body">
+                    <table id="user_table" class="navbar-collapse collapse">
+
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         var userinfo;
+        function get_user_statistics(username) {
+            console.log(username);
+            $.ajax({
+                url: '/api/user_statistics',
+                type: 'GET',
+                headers: {
+                    "Authorization": "Basic " + userinfo['token']
+                },
+                data: {
+                    username: username
+                }
+            }).success(function (data) {
+                console.log(data);
+                $('#user_table').empty();
+                $('#user_table').append("<thead> <td>时间</td> <td>餐费</td> </thead>");
+                var statistics = data['statistics'];
+                for (var i in statistics) {
+                    $('#user_table').append("<tr> <td>" + statistics[i]['month'] + "-" + statistics[i]['day'] + "</td> <td>" + statistics[i]['money'] + "</td> </tr>");
+                }
+                $('#user_table').append("<thead> <td>总计</td> <td>" + data['total'] + "</td> </thead>");
+            })
+        }
         function get_statistic() {
             $.ajax({
                 url: '/api/statistics',
@@ -42,15 +83,32 @@
                     "Authorization": "Basic " + userinfo['token']
                 }
             }).success(function (data) {
-                $('#table').empty();
-                $('#table').append("<thead> <td>时间</td> <td>餐费</td> </thead>");
-                var statistics = data['statistics'];
-                for (var i in statistics) {
-                    $('#table').append("<tr> <td>" + statistics[i]['month'] + "-" + statistics[i]['day'] + "</td> <td>" + statistics[i]['money'] + "</td> </tr>");
-                }
-                $('#table').append("<thead> <td>总计</td> <td>"+data['total']+"</td> </thead>");
+                console.log(data);
+                if (userinfo['mobile'] == '15201263650') {
+                    $('#table').empty();
+                    $('#table').append("<thead> <td>时间</td> <td>餐费  (注: 点击某行, 便能查看该行详情)</td></thead>");
+                    var statistics = data['statistics'];
+                    for (var i in statistics) {
+                        $('#table').append("<tr class='clickable-row' data-href='url://" + statistics[i]['_id'] + "'> <td>" + statistics[i]['_id'] + "</td> <td>" + statistics[i]['money'] + "</td> </tr>");
+                    }
+                    $('#table').append("<tr> <td>总计</td> <td>" + data['total'] + "</td> </tr>");
 
-            }).error(function () {
+                    $('tr').bind('click', function () {
+                        console.log($(this).data('href'));
+                        $('#myModal').modal();
+                        get_user_statistics($(this).data('href').substr(6));
+                    })
+                } else {
+                    $('#table').empty();
+                    $('#table').append("<thead> <td>时间</td> <td>餐费</td> </thead>");
+                    var statistics = data['statistics'];
+                    for (var i in statistics) {
+                        $('#table').append("<tr> <td>" + statistics[i]['month'] + "-" + statistics[i]['day'] + "</td> <td>" + statistics[i]['money'] + "</td> </tr>");
+                    }
+                    $('#table').append("<thead> <td>总计</td> <td>" + data['total'] + "</td> </thead>");
+                }
+            }).error(function (data) {
+                console.log(data)
                 alert('获取数据出错,请稍后尝试');
             })
         }
