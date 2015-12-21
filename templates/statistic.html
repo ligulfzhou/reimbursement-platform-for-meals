@@ -86,7 +86,7 @@
                 console.log(data);
                 if (userinfo['mobile'] == '15201263650') {
                     $('#table').empty();
-                    $('#table').append("<thead> <td>时间</td> <td>餐费  (注: 点击某行, 便能查看该行详情)</td></thead>");
+                    $('#table').append("<thead> <td>姓名</td> <td>餐费  (注: 点击某行, 便能查看该行详情)</td></thead>");
                     var statistics = data['statistics'];
                     for (var i in statistics) {
                         $('#table').append("<tr class='clickable-row' data-href='url://" + statistics[i]['_id'] + "'> <td>" + statistics[i]['_id'] + "</td> <td>" + statistics[i]['money'] + "</td> </tr>");

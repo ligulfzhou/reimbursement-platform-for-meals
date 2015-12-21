@@ -46,3 +46,8 @@ body {
 .navbar {
   margin-bottom: 20px;
 }
+
+td, th {
+  padding: 0 20px;
+  cursor: pointer;
+}
