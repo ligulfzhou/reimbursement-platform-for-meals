@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/listview_statistic"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="总计"
+            android:textSize="25dp"
+            android:textColor="#cf1313"/>
+        <TextView
+            android:id="@+id/tv_total"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            android:textSize="25dp"
+            android:textColor="#cf1313"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_refresh"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="刷新"
+            android:textSize="25dp"
+            android:textColor="#331a1a"/>
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="退出"
+            android:textSize="25dp"
+            android:textColor="#331a1a"/>
+    </LinearLayout>
+
+</LinearLayout>

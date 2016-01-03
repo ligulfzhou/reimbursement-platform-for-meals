@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_marginTop="50dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="社区村订餐"
+        android:gravity="center"
+        android:textSize="40dp"/>
+
+    <LinearLayout
+        android:id="@+id/ll_user"
+        android:layout_below="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择用户: "
+            android:textSize="15dp"/>
+        <Spinner
+            android:id="@+id/spinner_select_user"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_password"
+        android:layout_below="@+id/ll_user"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="输入密码: "
+            android:textSize="15dp"/>
+        <EditText
+            android:id="@+id/et_password"
+            android:inputType="textPassword"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:hint="输入密码"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_below="@+id/ll_password"
+        android:layout_centerInParent="true"
+        android:text="登陆"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}
+<title>请登陆</title>
+{% endblock %}
+
+
+{% block body %}
+<div class="container" style="margin-left: 45%;">
+    <h2>请登录</h2>
+
+    <div>
+        <select name="mobile" id="option" class="form-control" style="width:150px">
+            <option value="" SELECTED>请选择用户</option>
+            {% for user in users %}
+            <option value="{{ user.mobile }}">{{ user.username }}</option>
+            {% endfor %}
+        </select>
+    </div><br/>
+    <div style="text-align: center">
+        <input type="password" name="password" id="password" style="width: 150px;" class="form-control" placeholder="请输入密码" required>
+    </div>
+    <br/>
+    <button id="submit">登录</button><br/>
+    <!-- button id="already_login"><a href="/add">你已登录,前往添加餐费</a></button -->
+</div>
+
+
+<script>
+    var userinfo;
+    function login() {
+        var mobile = $('#option').val();
+        var password = $('#password').val();
+        $.post('/api/login', {mobile: mobile, password: password}, function (data) {
+            if (data && data['user']) {
+                window.localStorage.setItem('userinfo', JSON.stringify(data['user']));
+                window.location.href = '/add';
+            } else {
+                alert('登陆出错,请重试');
+            }
+        });
+    }
+    $(function () {
+         if (!userinfo || !userinfo['token']) {
+                userinfo = JSON.parse(window.localStorage.getItem('userinfo'));
+            }
+            if (userinfo && userinfo['token']) {
+                window.location.href = '/add';
+            }
+        $('#submit').on('click', function () {
+            login();
+        })
+    })
+</script>
+
+{% endblock %}

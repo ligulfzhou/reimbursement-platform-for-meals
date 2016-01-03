@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}
+<title>添加订餐</title>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/add">社区村订餐</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/add" id="add">添加</a></li>
+                    <li><a href="/statistic" id="statistic">统计</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li id="logout"><a href='/'>退出</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="jumbotron" id="add_container">
+        <h3>添加餐费</h3>
+
+        <div class="row">
+            <div class='col-sm-6'>
+                选择时间: <input type='text' class="form-control" id='calendar'/>
+            </div>
+            <div class='col-sm-6'>
+                输入金额: <input id="money" class="form-control" placeholder="请输入金额"/>
+            </div>
+        </div>
+        <button id="add_money">提交</button>
+    </div>
+
+    <script>
+        var userinfo;
+        function add_canfei() {
+            var date = $('#calendar').val();
+            var money = $('#money').val();
+            if (date && money) {
+                $.ajax({
+                    url: '/api/add_canfei',
+                    type: 'POST',
+                    headers: {
+                        "Authorization": "Basic " + userinfo['token']
+                    },
+                    data: {
+                        date: date,
+                        money: money
+                    }
+                }).success(function (data) {
+                    if (data['canfei'] == 'success') {
+                        alert("添加成功: \n "
+                                + date + " \n"
+                                + money);
+                    } else if (data['canfei'] == 'error_chongfu') {
+                        alert("添加失败: 不要重复添加");
+                    } else {
+                        alert("添加失败, 稍后重试");
+                    }
+                })
+            }
+        }
+
+        $(function () {
+            if (!userinfo || !userinfo['token']) {
+                userinfo = JSON.parse(window.localStorage.getItem('userinfo'));
+            }
+            if (!userinfo || !userinfo['token']) {
+                window.location.href = '/'
+            }
+
+            $('#calendar').datetimepicker({
+                locale: 'zh-cn',
+                format: 'YYYY-M-D'
+            });
+            $('#add_money').on('click', function () {
+                add_canfei();
+            });
+            $('#logout').on('click', function () {
+                window.localStorage.clear();
+            })
+        });
+    </script>
+
+    {% endblock %}
