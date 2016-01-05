@@ -107,7 +107,11 @@ def add_canfei():
 @app.route('/api/statistics')
 @auth.login_required
 def statistic():
-    timestruct = time.localtime(time.time())
+    flag = int(request.args.get('flag', None) or 0)
+    if flag:
+        timestruct = time.localtime(time.time() - 30 * 24 * 60 * 60)
+    else:
+        timestruct = time.localtime(time.time())
     year, month = timestruct.tm_year, timestruct.tm_mon
     if g.current_user['mobile'] == '15201263650':
         try:

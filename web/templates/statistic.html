@@ -31,6 +31,8 @@
         <table class="table table-bordered" id="table">
 
         </table>
+        <button id="last_month">查看上个月</button>
+        <button id="this_month">查看本月</button>
     </div>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -75,12 +77,15 @@
                 $('#user_table').append("<thead> <td>总计</td> <td>" + data['total'] + "</td> </thead>");
             })
         }
-        function get_statistic() {
+        function get_statistic(flag) {
             $.ajax({
                 url: '/api/statistics',
                 type: 'GET',
                 headers: {
                     "Authorization": "Basic " + userinfo['token']
+                },
+                data: {
+                    flag: flag
                 }
             }).success(function (data) {
                 console.log(data);
@@ -123,7 +128,21 @@
             $('#logout').on('click', function () {
                 window.localStorage.clear();
             });
-            get_statistic();
+
+            $('#last_month').on('click', function(){
+                get_statistic(1);
+                $('#this_month').show();
+                $('#last_month').hide();
+            });
+
+            $('#this_month').on('click', function(){
+                get_statistic(0);
+                $('#this_month').hide();
+                $('#last_month').show();
+            });
+            $('#this_month').hide();
+            $('#last_month').show();
+            get_statistic(0);
         })
     </script>
 </div>
