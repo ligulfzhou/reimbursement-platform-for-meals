@@ -55,6 +55,7 @@
     </div>
     <script>
         var userinfo;
+        var flag = 0;
         function get_user_statistics(username) {
             console.log(username);
             $.ajax({
@@ -64,7 +65,8 @@
                     "Authorization": "Basic " + userinfo['token']
                 },
                 data: {
-                    username: username
+                    username: username,
+                    flag: flag
                 }
             }).success(function (data) {
                 console.log(data);
@@ -130,12 +132,14 @@
             });
 
             $('#last_month').on('click', function(){
+                flag = 1;
                 get_statistic(1);
                 $('#this_month').show();
                 $('#last_month').hide();
             });
 
             $('#this_month').on('click', function(){
+                flag = 0;
                 get_statistic(0);
                 $('#this_month').hide();
                 $('#last_month').show();

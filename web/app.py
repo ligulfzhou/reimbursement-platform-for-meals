@@ -133,9 +133,13 @@ def statistic():
 @auth.login_required
 def user_statistic():
     username = request.args.get('username', '')
+    flag = int(request.args.get('flag', None) or 0)
     if not username:
         return make_response(jsonify({'user_statistics': 'error_req'}))
-    timestruct = time.localtime(time.time())
+    if flag:
+        timestruct = time.localtime(time.time() - 30 * 24 * 60 * 60)
+    else:
+        timestruct = time.localtime(time.time())
     year, month = timestruct.tm_year, timestruct.tm_mon
     if g.current_user['mobile'] == '15201263650':
         statistics = list(mongo.db.canfei.find({'username': username, 'month': '%s-%s' % (year, month)},
