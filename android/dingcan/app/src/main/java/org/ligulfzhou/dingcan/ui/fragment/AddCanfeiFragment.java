@@ -21,7 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import cz.msebera.android.httpclient.Header;
+//import cz.msebera.android.httpclient.Header;
+import org.apache.http.Header;
 
 public class AddCanfeiFragment extends Fragment {
 

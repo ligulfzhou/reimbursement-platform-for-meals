@@ -11,7 +11,7 @@ import static org.ligulfzhou.dingcan.api.AsyncHttpHelp.getHttpClient;
 
 
 public class Api {
-    public final static String HOST = "192.168.0.106:8888/";
+    public final static String HOST = "192.168.1.100:8888/";
     public final static String HTTP = "http://";
     public final static String BASE_URL = HTTP + HOST;
 
@@ -32,13 +32,14 @@ public class Api {
         AsyncHttpHelp.post(LOGIN, params, handler);
     }
 
-    public static void getStatistics(AsyncHttpResponseHandler handler){
+    public static void getStatistics(int flag, AsyncHttpResponseHandler handler){
         String token = AppContext.getInstance().getProperty(Constant.PROP_KEY_PRIVATE_TOKEN);
         AsyncHttpClient httpClient = getHttpClient();
         httpClient.addHeader("Authorization", "Basic " + token);
 
-        httpClient.get(STATISTIC, handler);
-
+        RequestParams params = new RequestParams();
+        params.put("flag", flag);
+        httpClient.get(STATISTIC, params, handler);
     }
 
     public static void postCanfei(String date, int money, AsyncHttpResponseHandler handler){

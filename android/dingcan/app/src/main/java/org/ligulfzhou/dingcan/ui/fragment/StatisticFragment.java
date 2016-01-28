@@ -24,7 +24,8 @@ import org.ligulfzhou.dingcan.bean.Statistic;
 import org.ligulfzhou.dingcan.ui.LoginActivity;
 
 import java.util.ArrayList;
-import cz.msebera.android.httpclient.Header;
+//import cz.msebera.android.httpclient.Header;
+import org.apache.http.Header;
 
 public class StatisticFragment extends Fragment {
 
@@ -32,7 +33,8 @@ public class StatisticFragment extends Fragment {
     TextView tv_total;
     ArrayList<Statistic> statistics;
     StatisticAdapter adapter;
-    Button btn_logout, btn_refresh;
+    Button btn_logout, btn_refresh, btn_lastmonth;
+    int current = 0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,11 +56,25 @@ public class StatisticFragment extends Fragment {
         btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refresh();
+                refresh(current);
+            }
+        });
+        btn_lastmonth = (Button) view.findViewById(R.id.btn_lastmonth);
+        btn_lastmonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(current == 0){
+                    btn_lastmonth.setText("本月");
+                    current = 1;
+                }else{
+                    btn_lastmonth.setText("上个月");
+                    current = 0;
+                }
+                refresh(current);
             }
         });
         statistics = new ArrayList<Statistic>();
-        Api.getStatistics(new AsyncHttpResponseHandler() {
+        Api.getStatistics(0, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String res = new String(responseBody);
@@ -93,9 +109,9 @@ public class StatisticFragment extends Fragment {
         return view;
     }
 
-    private void refresh(){
+    private void refresh(int flag){
         statistics = new ArrayList<Statistic>();
-        Api.getStatistics(new AsyncHttpResponseHandler() {
+        Api.getStatistics(flag, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String res = new String(responseBody);
@@ -108,7 +124,7 @@ public class StatisticFragment extends Fragment {
                     jsonArray = jsonObject.getJSONArray("statistics");
                     tv_total.setText(String.valueOf(jsonObject.getInt("total")));
 
-                    Toast.makeText(getContext(), jsonArray.toString(), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getContext(), jsonArray.toString(), Toast.LENGTH_LONG).show();
                     JSONObject jsontmp;
                     for (int i = 0; i < jsonArray.length(); i++) {
                         jsontmp = jsonArray.getJSONObject(i);
@@ -117,6 +133,9 @@ public class StatisticFragment extends Fragment {
 
                     adapter = new StatisticAdapter(getActivity().getBaseContext(), R.id.listview_statistic, statistics);
                     listview.setAdapter(adapter);
+//                    adapter.clear();
+//                    adapter.addAll(statistics);
+//                    adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

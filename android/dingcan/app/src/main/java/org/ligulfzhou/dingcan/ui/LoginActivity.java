@@ -23,7 +23,8 @@ import org.ligulfzhou.dingcan.api.Api;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import cz.msebera.android.httpclient.Header;
+//import cz.msebera.android.httpclient.Header;
+import org.apache.http.Header;
 
 public class LoginActivity extends AppCompatActivity {
 

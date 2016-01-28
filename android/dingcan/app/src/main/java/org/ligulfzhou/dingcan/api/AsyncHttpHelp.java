@@ -17,7 +17,7 @@ public class AsyncHttpHelp {
     public static AsyncHttpClient getHttpClient(){
         AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
         client.setTimeout(TIMEOUT_CONNECTION);
-        client.setResponseTimeout(TIMEOUT_SOCKET);
+//        client.setResponseTimeout(TIMEOUT_SOCKET);
         return client;
     }
 
