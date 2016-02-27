@@ -1,0 +1,6 @@
+framework module Pods_Dingcan {
+  umbrella header "Pods-Dingcan-umbrella.h"
+
+  export *
+  module * { export * }
+}
