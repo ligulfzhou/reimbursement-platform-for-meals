@@ -26,8 +26,8 @@ class DingcanViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         segment = UISegmentedControl(items: ["本月", "上个月"])
+        segment.selectedSegmentIndex = 0
         segment.addTarget(self, action: "segmentValueChanged:", forControlEvents: .ValueChanged)
         self.navigationItem.titleView = segment
         
@@ -35,14 +35,23 @@ class DingcanViewController: UIViewController, UITableViewDelegate, UITableViewD
         rightPlusButton.style = .Done
         self.navigationItem.rightBarButtonItem = rightPlusButton
         
+        let logoutButton = UIBarButtonItem(title: "logout", style: .Plain, target: self, action: "logout:")
+        self.navigationItem.leftBarButtonItem = logoutButton
+        
         tableView = UITableView(frame: view.bounds, style: .Plain)
         tableView.registerClass(UITableViewCell.classForCoder(), forCellReuseIdentifier:tableViewCellIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
         view.addSubview(tableView)
+        fetchData(1)
     }
     
-
+    //MARK: func logout
+    func logout(sender: UIBarButtonItem){
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("token")
+        UIApplication.sharedApplication().delegate?.window??.rootViewController = ViewController()
+    }
+    
     //MARK: segment target method: segmentValueChange
     func segmentValueChanged(sender: UISegmentedControl){
         let pageIndex = sender.selectedSegmentIndex
@@ -94,12 +103,6 @@ class DingcanViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func rightBarPlusButtonClicked(sender: UIBarButtonItem){
-//        let alert = UIAlertController(title: "title", message: "message", preferredStyle: .Alert)
-//        alert.addTextFieldWithConfigurationHandler { (UITextField) -> Void in
-//            
-//        }
-//        presentViewController(alert, animated: true, completion: nil)
-        
         let addCanfeiVC = AddCanfeiViewController()
         addCanfeiVC.modalTransitionStyle = .FlipHorizontal
         presentViewController(addCanfeiVC, animated: true) { () -> Void in

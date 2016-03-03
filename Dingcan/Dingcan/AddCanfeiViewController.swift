@@ -36,10 +36,8 @@ class AddCanfeiViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(addCanfeiButton)
         
         closeButton = UIButton(type: .System)
-//        closeButton.frame.origin = CGPoint(x: view.bounds.width - 30, y: 50)
         closeButton.frame = CGRect(x: view.bounds.width - 50, y: 50, width: 50, height: 50)
-                closeButton.setImage(UIImage(named: "shutdown"), forState: .Normal)
-//        closeButton.setTitle("close", forState: .Normal)
+        closeButton.setImage(UIImage(named: "shutdown"), forState: .Normal)
         closeButton.addTarget(self, action: "closeVC:", forControlEvents: .TouchUpInside)
         view.addSubview(closeButton)
     }
