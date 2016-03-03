@@ -43,7 +43,7 @@ class DingcanViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.dataSource = self
         tableView.delegate = self
         view.addSubview(tableView)
-        fetchData(1)
+        fetchData(0)
     }
     
     //MARK: func logout

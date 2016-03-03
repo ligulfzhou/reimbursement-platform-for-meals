@@ -24,11 +24,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
         let userLogined = checkUserLogin()
         if userLogined != nil {
-            NSLog("已登录dddddddddddddddd")
+            NSLog("已登录")
             print(NSUserDefaults.standardUserDefaults().stringForKey("token"))
             goToDingcanController()
         }else{
-            NSLog("未登陆ddddddddddddddddd")
+            NSLog("未登陆")
             layoutView()
         }
     }
@@ -38,33 +38,60 @@ class ViewController: UIViewController, UITextFieldDelegate {
         contentScrollView?.contentSize = view.bounds.size
         view.addSubview(contentScrollView!)
         
-        welcomeLable = UILabel(frame: CGRect(origin: CGPoint(x: view.frame.size.width / 2 - 50, y: view.frame.size.height / 3), size: CGSize(width: 200, height: 50)))
-        welcomeLable?.text = "Welcome"
-        contentScrollView!.addSubview(welcomeLable!)
         
-        mobileTextField = UITextField(frame: CGRect(origin: CGPoint(x: view.frame.size.width / 2 - 50, y: view.frame.size.height / 3 + 100), size: CGSize(width: 200, height: 50)))
+        welcomeLable = UILabel()
+        welcomeLable?.textAlignment = .Center
+        welcomeLable?.text = "welcome"
+        contentScrollView!.addSubview(welcomeLable!)
+        welcomeLable?.snp_makeConstraints(closure: { (make) -> Void in
+            make.top.equalTo(contentScrollView!).offset(50)
+            make.left.equalTo(contentScrollView!).offset(20)
+            make.right.equalTo(contentScrollView!).offset(-20)
+            make.height.equalTo(40)
+            make.centerX.equalTo(contentScrollView!)
+        })
+
+        mobileTextField = UITextField()
         mobileTextField?.borderStyle = .RoundedRect
-        mobileTextField?.returnKeyType = .Done
+        mobileTextField?.returnKeyType = .Next
         mobileTextField?.placeholder = "Mobile: "
         mobileTextField?.delegate = self
         contentScrollView!.addSubview(mobileTextField!)
-        
-        passwordTextField = UITextField(frame: CGRect(origin: CGPoint(x: view.frame.size.width / 2 - 50, y: view.frame.size.height / 3 + 200), size: CGSize(width: 200, height: 50)))
+        mobileTextField?.snp_makeConstraints(closure: { (make) -> Void in
+            make.top.equalTo(welcomeLable!).offset(40)
+            make.left.equalTo(contentScrollView!).offset(20)
+            make.right.equalTo(contentScrollView!).offset(-20)
+            make.height.equalTo(40)
+        })
+
+        passwordTextField = UITextField()
         passwordTextField?.borderStyle = .RoundedRect
         passwordTextField?.returnKeyType = .Done
         passwordTextField?.placeholder = "Password: "
         passwordTextField?.delegate = self
         contentScrollView!.addSubview(passwordTextField!)
-        
+        passwordTextField?.snp_makeConstraints(closure: { (make) -> Void in
+            make.top.equalTo(mobileTextField!).offset(50)
+            make.left.equalTo(contentScrollView!).offset(20)
+            make.right.equalTo(contentScrollView!).offset(-20)
+            make.height.equalTo(40)
+        })
+
         loginButton = UIButton(type: .System)
-        loginButton?.frame = CGRect(origin: CGPoint(x: view.frame.size.width / 2 - 50, y: view.frame.size.height / 3 + 300), size: CGSize(width: 200, height: 50))
         loginButton?.setTitle("Login", forState: .Normal)
         loginButton?.addTarget(self, action: "checkLogin:", forControlEvents: .TouchUpInside)
         contentScrollView!.addSubview(loginButton!)
+        loginButton?.snp_makeConstraints(closure: { (make) -> Void in
+            make.top.equalTo(passwordTextField!).offset(50)
+            make.left.equalTo(contentScrollView!).offset(20)
+            make.right.equalTo(contentScrollView!).offset(-20)
+            make.height.equalTo(40)
+        })
     }
     
     func goToDingcanController(){
         let navigationController = UINavigationController(rootViewController: DingcanViewController())
+//        presentViewController(navigationController, animated: true) { () -> Void in }
         UIApplication.sharedApplication().delegate?.window??.rootViewController = navigationController
     }
 
@@ -103,7 +130,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         if textField.placeholder == "Password: " {
             if mobileTextField?.text != nil{
                 checkLogin(loginButton!)
-//                self.performSelector("checkLogin:")
             }
         }
     }

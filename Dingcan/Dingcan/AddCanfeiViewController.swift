@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 import Alamofire
 
 class AddCanfeiViewController: UIViewController, UITextFieldDelegate {
@@ -19,27 +20,53 @@ class AddCanfeiViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        datePickerView = UIDatePicker(frame: CGRect(x: 0, y: 100, width: view.bounds.width, height: 200))
+        datePickerView = UIDatePicker()
         datePickerView.datePickerMode = .Date
         view.addSubview(datePickerView)
+        datePickerView.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo(view).offset(100)
+            make.left.equalTo(view).offset(20)
+            make.right.equalTo(view).offset(-20)
+            make.height.equalTo(150)
+        }
         
-        moneyTextField = UITextField(frame: CGRect(x: 0, y: 300, width: view.bounds.width, height: 50))
+//        moneyTextField = UITextField(frame: CGRect(x: 0, y: 300, width: view.bounds.width, height: 50))
+        moneyTextField = UITextField()
+        moneyTextField.placeholder = "canfei: "
         moneyTextField.delegate = self
         moneyTextField.borderStyle = .RoundedRect
         moneyTextField.keyboardType = .NumberPad
         view.addSubview(moneyTextField)
+        moneyTextField.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo(datePickerView.snp_bottom).offset(20)
+            make.left.equalTo(view).offset(20)
+            make.right.equalTo(view).offset(-20)
+            make.height.equalTo(40)
+        }
         
         addCanfeiButton = UIButton(type: .System)
-        addCanfeiButton.frame = CGRect(x: 0, y: 350, width: view.bounds.width, height: 50)
+//        addCanfeiButton.frame = CGRect(x: 0, y: 350, width: view.bounds.width, height: 50)
         addCanfeiButton.setTitle("添加", forState: .Normal)
         addCanfeiButton.addTarget(self, action: "addCanfei:", forControlEvents: .TouchUpInside)
         view.addSubview(addCanfeiButton)
+        addCanfeiButton.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo(moneyTextField.snp_bottom).offset(20)
+            make.left.equalTo(view).offset(20)
+            make.right.equalTo(view).offset(-20)
+            make.height.equalTo(40)
+        }
         
         closeButton = UIButton(type: .System)
-        closeButton.frame = CGRect(x: view.bounds.width - 50, y: 50, width: 50, height: 50)
+//        closeButton.frame = CGRect(x: view.bounds.width - 50, y: 50, width: 50, height: 50)
         closeButton.setImage(UIImage(named: "shutdown"), forState: .Normal)
         closeButton.addTarget(self, action: "closeVC:", forControlEvents: .TouchUpInside)
         view.addSubview(closeButton)
+        closeButton.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo(view).offset(20)
+            make.right.equalTo(view).offset(-20)
+            make.height.equalTo(40)
+            make.width.equalTo(40)
+        }
     }
 
     //MARK: closeButton touchupinside
