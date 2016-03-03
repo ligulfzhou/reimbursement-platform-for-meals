@@ -20,6 +20,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    
+    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.frame = CGRectMake(self.view.center.x, self.view.center.y, self.view.center.x + 20, self.view.center.y + 20);
     [button setTitle:@"Click ME!" forState:UIControlStateNormal];
@@ -41,7 +43,6 @@
                                      
                                      CanfeiViewControll *vc = [CanfeiViewControll new];
                                      [self.navigationController pushViewController:vc animated:YES];
-                                     
                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                                      NSLog(@"%@", error);
                                  }];

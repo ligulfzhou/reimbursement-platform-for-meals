@@ -15,6 +15,7 @@
 		507949A71C756529003E2AF1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 507949A51C756529003E2AF1 /* Main.storyboard */; };
 		507949A91C756529003E2AF1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 507949A81C756529003E2AF1 /* Assets.xcassets */; };
 		507949AC1C756529003E2AF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 507949AA1C756529003E2AF1 /* LaunchScreen.storyboard */; };
+		507CC8BD1C880BFD0079F0E3 /* AddCanfeiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507CC8BC1C880BFD0079F0E3 /* AddCanfeiViewController.swift */; };
 		CC2B2750C186C0BA6E3D3277 /* Pods_Dingcan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FB507FC4875631D88179995 /* Pods_Dingcan.framework */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,7 @@
 		507949A81C756529003E2AF1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		507949AB1C756529003E2AF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		507949AD1C756529003E2AF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		507CC8BC1C880BFD0079F0E3 /* AddCanfeiViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCanfeiViewController.swift; sourceTree = "<group>"; };
 		53DC2BBF3DF8A5ADA7B94FE2 /* Pods-Dingcan.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dingcan.release.xcconfig"; path = "Pods/Target Support Files/Pods-Dingcan/Pods-Dingcan.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,6 +87,7 @@
 				50195FC71C805857004A3442 /* DingcanViewController.swift */,
 				50195FC91C80622B004A3442 /* Api.swift */,
 				50195FCB1C815A8E004A3442 /* Canfei.swift */,
+				507CC8BC1C880BFD0079F0E3 /* AddCanfeiViewController.swift */,
 			);
 			path = Dingcan;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 			files = (
 				50195FC81C805857004A3442 /* DingcanViewController.swift in Sources */,
 				507949A41C756529003E2AF1 /* ViewController.swift in Sources */,
+				507CC8BD1C880BFD0079F0E3 /* AddCanfeiViewController.swift in Sources */,
 				50195FCA1C80622B004A3442 /* Api.swift in Sources */,
 				507949A21C756529003E2AF1 /* AppDelegate.swift in Sources */,
 				50195FCC1C815A8E004A3442 /* Canfei.swift in Sources */,
