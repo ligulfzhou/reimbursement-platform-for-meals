@@ -30,7 +30,6 @@ class AddCanfeiViewController: UIViewController, UITextFieldDelegate {
             make.height.equalTo(150)
         }
         
-//        moneyTextField = UITextField(frame: CGRect(x: 0, y: 300, width: view.bounds.width, height: 50))
         moneyTextField = UITextField()
         moneyTextField.placeholder = "canfei: "
         moneyTextField.delegate = self
@@ -45,7 +44,6 @@ class AddCanfeiViewController: UIViewController, UITextFieldDelegate {
         }
         
         addCanfeiButton = UIButton(type: .System)
-//        addCanfeiButton.frame = CGRect(x: 0, y: 350, width: view.bounds.width, height: 50)
         addCanfeiButton.setTitle("添加", forState: .Normal)
         addCanfeiButton.addTarget(self, action: "addCanfei:", forControlEvents: .TouchUpInside)
         view.addSubview(addCanfeiButton)
@@ -57,7 +55,6 @@ class AddCanfeiViewController: UIViewController, UITextFieldDelegate {
         }
         
         closeButton = UIButton(type: .System)
-//        closeButton.frame = CGRect(x: view.bounds.width - 50, y: 50, width: 50, height: 50)
         closeButton.setImage(UIImage(named: "shutdown"), forState: .Normal)
         closeButton.addTarget(self, action: "closeVC:", forControlEvents: .TouchUpInside)
         view.addSubview(closeButton)
